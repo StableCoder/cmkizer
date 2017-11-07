@@ -20,6 +20,9 @@ set(HEADERS
     src/util.hpp
     src/dsp.hpp
     src/dsw.hpp
+    src/proj.hpp
+    src/xproj.hpp
+    src/sln.hpp
 )
 
 set(SOURCES
@@ -28,7 +31,11 @@ set(SOURCES
     src/util.cpp
     src/dsp.cpp
     src/dsw.cpp
+    src/proj.cpp
+    src/xproj.cpp
+    src/sln.cpp
     src/main.cpp
 )
 
 add_executable(cmkizer ${SOURCES} ${HEADERS})
+target_link_libraries(cmkizer xml2)

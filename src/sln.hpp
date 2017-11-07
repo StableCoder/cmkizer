@@ -26,50 +26,20 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef SLN_HPP
+#define SLN_HPP
+
 // cmkizer
-#include "file_parser.hpp"
-#include "dsp.hpp"
-#include "dsw.hpp"
-#include "proj.hpp"
-#include "sln.hpp"
-#include "xproj.hpp"
+#include "type_defs.hpp"
 
 // C++
-#include <cstring>
+#include <string>
+#include <tuple>
 
-std::tuple<bool, ProjectData> parseProject(const std::string &projectPath) {
-  // Figure out the file type.
-  const auto lastDot(projectPath.find_last_of('.'));
-  if (lastDot != std::string::npos) {
-    const char *ext = projectPath.data() + lastDot;
+/// Parses a vcproj or sln project file.
+/// \param projectPath The path of the file to parse.
+/// \return A boolean representing the parse success, and the associated parsed
+/// ProjectData.
+std::tuple<bool, ProjectData> slnProjectParse(const std::string &projectPath);
 
-    if (strcmp(ext, ".dsw") == 0 || strcmp(ext, ".DSW") == 0) {
-      return dswProjectParse(projectPath);
-    }
-    if (strcmp(ext, ".sln") == 0 || strcmp(ext, ".SLN") == 0) {
-      return slnProjectParse(projectPath);
-    }
-  }
-
-  // We didn't process anything
-  return std::make_tuple(false, ProjectData());
-}
-
-std::tuple<bool, TargetData> parseTarget(const std::string &targetPath) {
-  const auto lastDot = targetPath.find_last_of('.');
-  if (lastDot != std::string::npos) {
-    const char *ext = targetPath.data() + lastDot;
-
-    if (strcmp(ext, ".dsp") == 0 || strcmp(ext, ".DSP") == 0) {
-      return dspTargetParse(targetPath);
-    }
-    if (strcmp(ext, ".proj") == 0 || strcmp(ext, ".PROJ") == 0) {
-      return projTargetParse(targetPath);
-    }
-    if (strcmp(ext, ".xproj") == 0 || strcmp(ext, ".XPROJ") == 0) {
-      return xprojTargetParse(targetPath);
-    }
-  }
-
-  return std::make_tuple(false, TargetData());
-};
+#endif // SLN_HPP

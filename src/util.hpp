@@ -51,14 +51,14 @@ void determineLanguage(const std::string_view fileName, TargetData &data,
                        FilterGroup &group);
 
 /// Parses a target's output file to determine if it is a library or an
-/// executable. 
-/// \param outputName The name of the output to determine if it is a library. 
+/// executable.
+/// \param outputName The name of the output to determine if it is a library.
 /// \return True if a library, false otherwise.
 bool checkIsLibrary(const std::string_view outputName);
 
 /// Parses a string using common delimiters to split it into an array of strings
-/// instead. 
-/// \param items The straing to split and return. 
+/// instead.
+/// \param items The straing to split and return.
 /// \return A vector of the split strings.
 std::vector<std::string> parseItems(const std::string_view items);
 

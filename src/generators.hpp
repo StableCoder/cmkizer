@@ -48,8 +48,8 @@ void generateCMakeProject(const ProjectData &projectData);
 /// Generates a CMake file using the provided target data.
 /// \param data The TargetData to use.
 /// \param standalone If true, then the target is written as if a standalone
-/// project/target combination. 
-/// \param pOutfile If specified, then this will be file the output is written 
+/// project/target combination.
+/// \param pOutfile If specified, then this will be file the output is written
 /// to.
 void generateCMakeTarget(const TargetData &data, bool standalone = false,
                          FILE *pOutfile = nullptr);
