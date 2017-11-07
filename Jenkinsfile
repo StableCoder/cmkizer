@@ -1,11 +1,13 @@
 pipeline {
-    agent none
+    agent {
+        label 'cmake'
+    }
     stages {
         stage('Build and Test') {
             parallel {
                 stage('Linux/GCC') {
                     agent {
-                        label 'linux && cmake && gcc'
+                        label 'linux && gcc'
                     }
                     steps {
                         sh '''
@@ -21,7 +23,7 @@ pipeline {
                 }
                 stage('Linux/GCC/Ninja') {
                     agent {
-                        label 'linux && cmake && gcc && ninja'
+                        label 'linux && gcc && ninja'
                     }
                     steps {
                         sh '''
@@ -37,7 +39,7 @@ pipeline {
                 }
                 stage('Linux/Clang') {
                     agent {
-                        label 'linux && cmake && clang'
+                        label 'linux && clang'
                     }
                     steps {
                         sh '''
@@ -55,7 +57,7 @@ pipeline {
                 }
                 stage('Linux/Clang/Ninja') {
                     agent {
-                        label 'linux && cmake && clang && ninja'
+                        label 'linux && clang && ninja'
                     }
                     steps {
                         sh '''
@@ -73,7 +75,7 @@ pipeline {
                 }
                 stage('Windows/GCC') {
                     agent {
-                        label 'windows && cmake && gcc'
+                        label 'windows && gcc'
                     }
                     steps {
                         bat'''
@@ -90,7 +92,7 @@ pipeline {
                 }
                 stage('Windows/GCC/Ninja') {
                     agent {
-                        label 'windows && cmake && gcc && ninja'
+                        label 'windows && gcc && ninja'
                     }
                     steps {
                         bat'''
@@ -107,7 +109,7 @@ pipeline {
                 }
                 stage('Windows/Clang') {
                     agent {
-                        label 'windows && cmake && clang'
+                        label 'windows && clang'
                     }
                     steps {
                         bat'''
@@ -126,7 +128,7 @@ pipeline {
                 }
                 stage('Windows/Clang/Ninja') {
                     agent {
-                        label 'windows && cmake && clang && ninja'
+                        label 'windows && clang && ninja'
                     }
                     steps {
                         bat'''
@@ -145,7 +147,7 @@ pipeline {
                 }
                 stage('Windows/MSVC2015') {
                     agent {
-                        label 'windows && cmake && msvc2015'
+                        label 'windows && msvc2015'
                     }
                     steps {
                         bat '''
@@ -163,7 +165,7 @@ pipeline {
                 }
                 stage('Windows/MSVC2017') {
                     agent {
-                        label 'windows && cmake && msvc2017'
+                        label 'windows && msvc2017'
                     }
                     steps {
                         bat '''
