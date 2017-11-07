@@ -397,7 +397,7 @@ void generateCMakeTarget(const TargetData &data, bool standalone,
     if (!it.includes.empty()) {
       fprintf(pOut, "    target_include_directories( %s", it.name.data());
       for (auto &inc : it.includes) {
-        fprintf_s(pOut, " %s", inc.data());
+        fprintf(pOut, " %s", inc.data());
       }
       fprintf(pOut, " )\n");
     }
