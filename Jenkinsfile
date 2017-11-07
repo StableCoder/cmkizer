@@ -17,7 +17,6 @@ pipeline {
                             gcc --version
                             cmake -G "Unix Makefiles" ../
                             make
-                            ctest
                         '''
                     }
                 }
@@ -33,7 +32,6 @@ pipeline {
                             gcc --version
                             cmake -G "Ninja" ../
                             ninja
-                            ctest
                         '''
                     }
                 }
@@ -51,7 +49,6 @@ pipeline {
                             clang --version
                             cmake -G "Unix Makefiles" ../
                             make
-                            ctest
                         '''
                     }
                 }
@@ -69,7 +66,6 @@ pipeline {
                             clang --version
                             cmake -G "Ninja" ../
                             ninja
-                            ctest
                         '''
                     }
                 }
@@ -86,7 +82,6 @@ pipeline {
                             gcc --version
                             call cmake -G "MinGW Makefiles" ../
                             mingw32-make
-                            ctest
                         '''
                     }
                 }
@@ -103,7 +98,6 @@ pipeline {
                             gcc --version
                             call cmake -G "Ninja" ../
                             ninja
-                            ctest
                         '''
                     }
                 }
@@ -122,7 +116,6 @@ pipeline {
                             clang --version
                             call cmake -G "MinGW Makefiles" ../
                             mingw32-make
-                            ctest
                         '''
                     }
                 }
@@ -141,7 +134,6 @@ pipeline {
                             clang --version
                             call cmake -G "Ninja" ../
                             ninja
-                            ctest
                         '''
                     }
                 }
@@ -159,7 +151,6 @@ pipeline {
                             cd build
                             call cmake -G "NMake Makefiles" ../
                             nmake
-                            ctest
                         '''
                     }
                 }
@@ -177,7 +168,6 @@ pipeline {
                             cd build
                             call cmake -G "NMake Makefiles" ../
                             nmake
-                            ctest
                         '''
                     }
                 }
