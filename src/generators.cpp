@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // C++
 #include <algorithm>
+#include <cctype>
 #include <tuple>
 
 ProjectData projectPreprocessing(ProjectData data) {

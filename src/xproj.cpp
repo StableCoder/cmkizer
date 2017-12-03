@@ -34,6 +34,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // libxml2
 #include <libxml/parser.h>
 
+// C++
+#include <algorithm>
+
 std::tuple<bool, TargetData>
 xprojTargetParse(const std::string_view targetPath) {
   TargetData data;

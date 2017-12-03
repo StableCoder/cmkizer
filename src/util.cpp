@@ -29,6 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "util.hpp"
 
 // C++
+#include <algorithm>
 #include <cstring>
 
 void determineLanguage(const std::string_view fileName, TargetData &data,
