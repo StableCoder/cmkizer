@@ -78,4 +78,8 @@ set(SOURCES
 )
 
 add_executable(cmkizer ${SOURCES})
-target_link_libraries(cmkizer libxml2)
+if(MSVC)
+    target_link_libraries(cmkizer libxml2)
+else()
+    target_link_libraries(cmkizer xml2)
+endif()
