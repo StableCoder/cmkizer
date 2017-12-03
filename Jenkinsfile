@@ -79,23 +79,6 @@ pipeline {
                         '''
                     }
                 }
-                stage('Debug/Windows/MSVC2015') {
-                    agent {
-                        label 'windows && msvc2015 && cmake'
-                    }
-                    steps {
-                        bat '''
-                            set VSCMD_START_DIR=%CD%
-                            call "%MSVC2017_BUILD_TOOLS%" x64 %WIN10_SDK_VER% -vcvars_ver=14.0
-                            set PATH=%PATH%;%MINGW64%;
-                            rmdir /Q /S build
-                            mkdir build
-                            cd build
-                            call cmake -G "NMake Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
-                            nmake
-                        '''
-                    }
-                }
                 stage('Debug/Windows/MSVC2017') {
                     agent {
                         label 'windows && msvc2017 && cmake'
@@ -187,23 +170,6 @@ pipeline {
                             clang --version
                             call cmake -G "MinGW Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
                             mingw32-make
-                        '''
-                    }
-                }
-                stage('Release/Windows/MSVC2015') {
-                    agent {
-                        label 'windows && msvc2015 && cmake'
-                    }
-                    steps {
-                        bat '''
-                            set VSCMD_START_DIR=%CD%
-                            call "%MSVC2017_BUILD_TOOLS%" x64 %WIN10_SDK_VER% -vcvars_ver=14.0
-                            set PATH=%PATH%;%MINGW64%;
-                            rmdir /Q /S build
-                            mkdir build
-                            cd build
-                            call cmake -G "NMake Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
-                            nmake
                         '''
                     }
                 }
@@ -301,23 +267,6 @@ pipeline {
                         '''
                     }
                 }
-                stage('MinSizeRel/Windows/MSVC2015') {
-                    agent {
-                        label 'windows && msvc2015 && cmake'
-                    }
-                    steps {
-                        bat '''
-                            set VSCMD_START_DIR=%CD%
-                            call "%MSVC2017_BUILD_TOOLS%" x64 %WIN10_SDK_VER% -vcvars_ver=14.0
-                            set PATH=%PATH%;%MINGW64%;
-                            rmdir /Q /S build
-                            mkdir build
-                            cd build
-                            call cmake -G "NMake Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
-                            nmake
-                        '''
-                    }
-                }
                 stage('MinSizeRel/Windows/MSVC2017') {
                     agent {
                         label 'windows && msvc2017 && cmake'
@@ -409,23 +358,6 @@ pipeline {
                             clang --version
                             call cmake -G "MinGW Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
                             mingw32-make
-                        '''
-                    }
-                }
-                stage('RelWithDebInfo/Windows/MSVC2015') {
-                    agent {
-                        label 'windows && msvc2015 && cmake'
-                    }
-                    steps {
-                        bat '''
-                            set VSCMD_START_DIR=%CD%
-                            call "%MSVC2017_BUILD_TOOLS%" x64 %WIN10_SDK_VER% -vcvars_ver=14.0
-                            set PATH=%PATH%;%MINGW64%;
-                            rmdir /Q /S build
-                            mkdir build
-                            cd build
-                            call cmake -G "NMake Makefiles" ../ %CUSTOM_CMAKE_OPTIONS% -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
-                            nmake
                         '''
                     }
                 }
