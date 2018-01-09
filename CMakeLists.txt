@@ -78,6 +78,7 @@ set(SOURCES
 )
 
 add_executable(cmkizer ${SOURCES})
+target_include_directories(cmkizer PRIVATE ${LIBXML2_INCLUDE_DIR})
 if(MSVC)
     target_link_libraries(cmkizer libxml2)
 else()
