@@ -4,6 +4,20 @@ pipeline {
         CUSTOM_CMAKE_OPTIONS = ''
     }
     stages {
+        stage('clang-tidy') {
+            agent {
+                label 'linux && cmake && clang'
+            }
+            steps {
+                sh '''
+                    rm -rf build/
+                    mkdir build
+                    cd build
+                    cmake -G "Unix Makefiles" ../ $CUSTOM_CMAKE_OPTIONS
+                    make tidy
+                '''
+            }
+        }
         stage('Debug Builds/Tests') {
             environment {
                 BUILD_TYPE = 'Debug'
