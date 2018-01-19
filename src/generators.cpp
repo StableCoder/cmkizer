@@ -201,15 +201,16 @@ ProjectData projectPreprocessing(ProjectData data) {
     return data;
 }
 
-void generateCMakeProject(const ProjectData &data) {
+void generateCMakeProject(const ProjectData &projectData) {
     // Open own file.
     std::string outFilePath;
-    auto lastSlash = std::min(data.path.find_last_of('/'), data.path.find_last_of('\\'));
+    auto lastSlash =
+        std::min(projectData.path.find_last_of('/'), projectData.path.find_last_of('\\'));
     if (lastSlash == std::string::npos) {
         outFilePath = "./";
     } else {
         lastSlash++;
-        outFilePath = data.path.substr(0, lastSlash);
+        outFilePath = projectData.path.substr(0, lastSlash);
     }
     outFilePath += cCmakeFilename;
     FILE *pOut = fopen(outFilePath.c_str(), "w");
@@ -218,9 +219,9 @@ void generateCMakeProject(const ProjectData &data) {
         return;
     }
     fprintf(pOut, "cmake_minimum_required( VERSION %s )\n", gGlobalSettings.cmakeVersion.data());
-    fprintf(pOut, "project ( %s )\n\n", data.name.data());
+    fprintf(pOut, "project ( %s )\n\n", projectData.name.data());
 
-    for (auto &target : data.targets) {
+    for (auto &target : projectData.targets) {
         if (target.relativePath.find('/') == std::string::npos) {
             // Put it in the same file, since it's in the same folder.
             fprintf(pOut, "\n\n# %s Target\n", target.name.data());
