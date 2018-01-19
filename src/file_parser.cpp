@@ -35,38 +35,38 @@
 #include <cstring>
 
 std::tuple<bool, ProjectData> parseProject(const std::string &projectPath) {
-  // Figure out the file type.
-  const auto lastDot(projectPath.find_last_of('.'));
-  if (lastDot != std::string::npos) {
-    const char *ext = projectPath.data() + lastDot;
+    // Figure out the file type.
+    const auto lastDot(projectPath.find_last_of('.'));
+    if (lastDot != std::string::npos) {
+        const char *ext = projectPath.data() + lastDot;
 
-    if (strcmp(ext, ".dsw") == 0 || strcmp(ext, ".DSW") == 0) {
-      return dswProjectParse(projectPath);
+        if (strcmp(ext, ".dsw") == 0 || strcmp(ext, ".DSW") == 0) {
+            return dswProjectParse(projectPath);
+        }
+        if (strcmp(ext, ".sln") == 0 || strcmp(ext, ".SLN") == 0) {
+            return slnProjectParse(projectPath);
+        }
     }
-    if (strcmp(ext, ".sln") == 0 || strcmp(ext, ".SLN") == 0) {
-      return slnProjectParse(projectPath);
-    }
-  }
 
-  // We didn't process anything
-  return std::make_tuple(false, ProjectData());
+    // We didn't process anything
+    return std::make_tuple(false, ProjectData());
 }
 
 std::tuple<bool, TargetData> parseTarget(const std::string &targetPath) {
-  const auto lastDot = targetPath.find_last_of('.');
-  if (lastDot != std::string::npos) {
-    const char *ext = targetPath.data() + lastDot;
+    const auto lastDot = targetPath.find_last_of('.');
+    if (lastDot != std::string::npos) {
+        const char *ext = targetPath.data() + lastDot;
 
-    if (strcmp(ext, ".dsp") == 0 || strcmp(ext, ".DSP") == 0) {
-      return dspTargetParse(targetPath);
+        if (strcmp(ext, ".dsp") == 0 || strcmp(ext, ".DSP") == 0) {
+            return dspTargetParse(targetPath);
+        }
+        if (strcmp(ext, ".proj") == 0 || strcmp(ext, ".PROJ") == 0) {
+            return projTargetParse(targetPath);
+        }
+        if (strcmp(ext, ".xproj") == 0 || strcmp(ext, ".XPROJ") == 0) {
+            return xprojTargetParse(targetPath);
+        }
     }
-    if (strcmp(ext, ".proj") == 0 || strcmp(ext, ".PROJ") == 0) {
-      return projTargetParse(targetPath);
-    }
-    if (strcmp(ext, ".xproj") == 0 || strcmp(ext, ".XPROJ") == 0) {
-      return xprojTargetParse(targetPath);
-    }
-  }
 
-  return std::make_tuple(false, TargetData());
+    return std::make_tuple(false, TargetData());
 };

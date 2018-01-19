@@ -48,7 +48,6 @@ void generateCMakeProject(const ProjectData &projectData);
 /// project/target combination.
 /// \param pOutfile If specified, then this will be file the output is written
 /// to.
-void generateCMakeTarget(const TargetData &data, bool standalone = false,
-                         FILE *pOutfile = nullptr);
+void generateCMakeTarget(const TargetData &data, bool standalone = false, FILE *pOutfile = nullptr);
 
 #endif // GENERATORS_HPP

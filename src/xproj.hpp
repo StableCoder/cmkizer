@@ -37,7 +37,6 @@
 /// \param targetPath The path of the file to parse.
 /// \return A boolean representing the parse success, and the associated parsed
 /// TargetData.
-std::tuple<bool, TargetData>
-xprojTargetParse(const std::string_view projectPath);
+std::tuple<bool, TargetData> xprojTargetParse(const std::string_view projectPath);
 
 #endif // XPROJ_HPP

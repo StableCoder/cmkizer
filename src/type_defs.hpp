@@ -33,52 +33,52 @@
 /// A grouping of files together, separated as source, header and resource
 /// files.
 struct FilterGroup {
-  std::string name;
-  std::vector<std::string> sourceFiles;
-  std::vector<std::string> headerFiles;
-  std::vector<std::string> resourceFiles;
+    std::string name;
+    std::vector<std::string> sourceFiles;
+    std::vector<std::string> headerFiles;
+    std::vector<std::string> resourceFiles;
 };
 
 /// A particular configuration of a target, including lists for the particular
 /// includes, libraries and definitions.
 struct TargetConfig {
-  std::string name;
-  std::string description;
-  std::vector<std::string> definitions;
-  std::vector<std::string> includes;
-  std::vector<std::string> linkLibraries;
+    std::string name;
+    std::string description;
+    std::vector<std::string> definitions;
+    std::vector<std::string> includes;
+    std::vector<std::string> linkLibraries;
 };
 
 /// A full target's information, including the file's location, the configs,
 /// files, and languages used.
 struct TargetData {
-  std::string name;
-  std::string displayName;
-  std::string fullPath;
-  std::string relativePath;
-  std::vector<TargetConfig> configs;
-  std::vector<FilterGroup> groups;
-  std::vector<std::string> dependencies;
-  bool enableC = false;
-  bool enableCXX = false;
-  bool enableFortran = false;
-  bool isLibrary = false;
-  int useMFC = 0;
-  bool useQt = false;
+    std::string name;
+    std::string displayName;
+    std::string fullPath;
+    std::string relativePath;
+    std::vector<TargetConfig> configs;
+    std::vector<FilterGroup> groups;
+    std::vector<std::string> dependencies;
+    bool enableC = false;
+    bool enableCXX = false;
+    bool enableFortran = false;
+    bool isLibrary = false;
+    int useMFC = 0;
+    bool useQt = false;
 };
 
 /// A full project's information.
 struct ProjectData {
-  std::string name;
-  std::string path;
-  std::vector<TargetData> targets;
+    std::string name;
+    std::string path;
+    std::vector<TargetData> targets;
 };
 
 struct GlobalSettings {
-  int qtVersion = 0;
-  std::string includePath = "include/";
-  std::string cmakeVersion = "3.9";
-  int cpackType = 0;
+    int qtVersion = 0;
+    std::string includePath = "include/";
+    std::string cmakeVersion = "3.9";
+    int cpackType = 0;
 };
 
 constexpr const char *cCmakeFilename("CMakeLists.txt");

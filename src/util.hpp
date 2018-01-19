@@ -44,8 +44,7 @@ static GlobalSettings gGlobalSettings;
 /// \param fileName The filename to determine what kind of file it is.
 /// \param data The TargetData struct to fill with the language of the file.
 /// \param group The FilterGroup the file will belong to.
-void determineLanguage(const std::string_view fileName, TargetData &data,
-                       FilterGroup &group);
+void determineLanguage(const std::string_view fileName, TargetData &data, FilterGroup &group);
 
 /// Parses a target's output file to determine if it is a library or an
 /// executable.
