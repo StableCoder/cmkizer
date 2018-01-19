@@ -31,19 +31,20 @@
 
 // C++
 #include <string>
+#include <string_view>
 #include <tuple>
 
 /// \brief Parses a project file, typically a .sln file.
 /// \param projectPath The path to the project file to parse.
 /// \return A boolean representing th success, and ProjectData for a successful
 /// parse.
-std::tuple<bool, ProjectData> parseProject(const std::string &projectPath);
+std::tuple<bool, ProjectData> parseProject(std::string_view projectPath);
 
 /// \brief Parses a target file, typically a .vcproj or vcxproj file.
 /// \param projectPath The path to the target file to parse.
 /// \return A boolean representing th success, and TargetData for a successful
 /// parse.
-std::tuple<bool, TargetData> parseTarget(const std::string &targetPath);
+std::tuple<bool, TargetData> parseTarget(std::string_view targetPath);
 
 // std::tuple<bool, SetupData> parseSetup(const std::string& setupPath);
 

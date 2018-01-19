@@ -33,8 +33,8 @@
 #include <cstring>
 #include <fstream>
 
-std::tuple<bool, TargetData> dspTargetParse(const std::string &filePath) {
-    std::ifstream inFile(filePath, std::ios::in);
+std::tuple<bool, TargetData> dspTargetParse(std::string_view filePath) {
+    std::ifstream inFile(filePath.data(), std::ios::in);
     if (!inFile) {
         return std::make_tuple(false, TargetData());
     }

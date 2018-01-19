@@ -34,7 +34,7 @@
 // C++
 #include <algorithm>
 
-std::tuple<bool, TargetData> xprojTargetParse(const std::string_view targetPath) {
+std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
     TargetData data;
     data.fullPath = targetPath;
 

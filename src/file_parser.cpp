@@ -32,18 +32,21 @@
 #include "xproj.hpp"
 
 // C++
-#include <cstring>
+#include <algorithm>
+#include <cctype>
 
-std::tuple<bool, ProjectData> parseProject(const std::string &projectPath) {
+std::tuple<bool, ProjectData> parseProject(std::string_view projectPath) {
     // Figure out the file type.
     const auto lastDot(projectPath.find_last_of('.'));
     if (lastDot != std::string::npos) {
-        const char *ext = projectPath.data() + lastDot;
+        std::string ext = projectPath.data() + lastDot;
 
-        if (strcmp(ext, ".dsw") == 0 || strcmp(ext, ".DSW") == 0) {
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+        if (ext == ".dsw") {
             return dswProjectParse(projectPath);
         }
-        if (strcmp(ext, ".sln") == 0 || strcmp(ext, ".SLN") == 0) {
+        if (ext == ".sln") {
             return slnProjectParse(projectPath);
         }
     }
@@ -52,18 +55,18 @@ std::tuple<bool, ProjectData> parseProject(const std::string &projectPath) {
     return std::make_tuple(false, ProjectData());
 }
 
-std::tuple<bool, TargetData> parseTarget(const std::string &targetPath) {
+std::tuple<bool, TargetData> parseTarget(std::string_view targetPath) {
     const auto lastDot = targetPath.find_last_of('.');
     if (lastDot != std::string::npos) {
-        const char *ext = targetPath.data() + lastDot;
+        std::string ext = targetPath.data() + lastDot;
 
-        if (strcmp(ext, ".dsp") == 0 || strcmp(ext, ".DSP") == 0) {
+        if (ext == ".dsp") {
             return dspTargetParse(targetPath);
         }
-        if (strcmp(ext, ".proj") == 0 || strcmp(ext, ".PROJ") == 0) {
+        if (ext == ".proj") {
             return projTargetParse(targetPath);
         }
-        if (strcmp(ext, ".xproj") == 0 || strcmp(ext, ".XPROJ") == 0) {
+        if (ext == ".vcxproj") {
             return xprojTargetParse(targetPath);
         }
     }

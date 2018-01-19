@@ -33,8 +33,8 @@
 #include <cstring>
 #include <fstream>
 
-std::tuple<bool, ProjectData> slnProjectParse(const std::string &projectPath) {
-    std::ifstream inFile(projectPath, std::ios::in);
+std::tuple<bool, ProjectData> slnProjectParse(std::string_view projectPath) {
+    std::ifstream inFile(projectPath.data(), std::ios::in);
     if (!inFile) {
         return std::make_tuple(false, ProjectData());
     }

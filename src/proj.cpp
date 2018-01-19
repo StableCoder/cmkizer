@@ -37,7 +37,7 @@
 #include <cstring>
 #include <fstream>
 
-std::tuple<bool, TargetData> projTargetParse(const std::string_view targetPath) {
+std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
     TargetData data;
     data.fullPath = targetPath;
 

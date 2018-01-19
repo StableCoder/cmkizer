@@ -33,9 +33,9 @@
 #include <cstring>
 #include <fstream>
 
-std::tuple<bool, ProjectData> dswProjectParse(const std::string &projectPath) {
+std::tuple<bool, ProjectData> dswProjectParse(std::string_view projectPath) {
     ProjectData data;
-    std::ifstream inFile(projectPath, std::ios::in);
+    std::ifstream inFile(projectPath.data(), std::ios::in);
     if (!inFile) {
         return std::make_tuple(false, data);
     }

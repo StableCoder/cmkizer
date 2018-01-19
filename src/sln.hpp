@@ -37,6 +37,6 @@
 /// \param projectPath The path of the file to parse.
 /// \return A boolean representing the parse success, and the associated parsed
 /// ProjectData.
-std::tuple<bool, ProjectData> slnProjectParse(const std::string &projectPath);
+std::tuple<bool, ProjectData> slnProjectParse(std::string_view projectPath);
 
 #endif // SLN_HPP

@@ -38,6 +38,6 @@
 /// \param filePath The path to the file
 /// \return A tuple returning a boolean representing if the file was parsed, and
 /// corresponding project data from a successful parsing.
-std::tuple<bool, ProjectData> dswProjectParse(const std::string &projectPath);
+std::tuple<bool, ProjectData> dswProjectParse(std::string_view projectPath);
 
 #endif // DSW_HPP

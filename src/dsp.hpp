@@ -38,6 +38,6 @@
 /// \param filePath The path to the file
 /// \return A tuple returning a boolean representing if the file was parsed, and
 /// corresponding target data from a successful parsing.
-std::tuple<bool, TargetData> dspTargetParse(const std::string &filePath);
+std::tuple<bool, TargetData> dspTargetParse(std::string_view filePath);
 
 #endif // DSP_HPP
