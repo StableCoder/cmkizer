@@ -225,9 +225,9 @@ void generateCMakeProject(const ProjectData &projectData) {
         if (target.relativePath.find('/') == std::string::npos) {
             // Put it in the same file, since it's in the same folder.
             fprintf(pOut, "\n\n# %s Target\n", target.name.data());
-            generateCMakeTarget(target, false, pOut);
+            generateCMakeTarget(target, pOut);
         } else {
-            generateCMakeTarget(target, false, nullptr);
+            generateCMakeTarget(target, nullptr);
             if (target.relativePath.find('"') != std::string::npos) {
                 // If the path has a space in it, surround with quotes.
                 fprintf(
@@ -244,7 +244,7 @@ void generateCMakeProject(const ProjectData &projectData) {
     fclose(pOut);
 }
 
-void generateCMakeTarget(const TargetData &data, bool standalone, FILE *pOutfile) {
+void generateCMakeTarget(const TargetData &data, FILE *pOutfile) {
     FILE *pOut = pOutfile;
     if (pOut == nullptr) {
         // Open own file.
@@ -269,9 +269,8 @@ void generateCMakeTarget(const TargetData &data, bool standalone, FILE *pOutfile
     }
 
     // Project Name
-    if (standalone) {
-        fprintf(pOut, "project( %s )\n", data.name.data());
-    }
+    fprintf(pOut, "project( %s )\n", data.name.data());
+
     // Languages
     fprintf(pOut, "enable_language( ");
     if (data.enableC) {
@@ -401,6 +400,7 @@ void generateCMakeTarget(const TargetData &data, bool standalone, FILE *pOutfile
         }
 
         // targets
+        /*
         fprintf(pOut, "\n    install(\n");
         fprintf(pOut, "            TARGETS %s\n", it.name.data());
         fprintf(pOut, "            RUNTIME DESTINATION bin\n");
@@ -408,10 +408,11 @@ void generateCMakeTarget(const TargetData &data, bool standalone, FILE *pOutfile
         fprintf(pOut, "            LIBRARY DESTINATION lib\n");
         fprintf(pOut, "            ARCHIVE DESTINATION lib\n");
         fprintf(pOut, "            COMPONENT libraries\n    )\n");
+        */
 
         fprintf(pOut, "endif()\n");
     }
-
+    /*
     // Install
     fprintf(pOut, "\n# Install\n");
     // h
@@ -426,6 +427,7 @@ void generateCMakeTarget(const TargetData &data, bool standalone, FILE *pOutfile
     fprintf(pOut, "        DESTINATION %s\n", gGlobalSettings.includePath.data());
     fprintf(pOut, "        COMPONENT headers\n");
     fprintf(pOut, "        FILES MATCHING PATTERN \"*.hpp\"\n)\n");
+    */
 
     if (pOutfile == nullptr) {
         fclose(pOut);

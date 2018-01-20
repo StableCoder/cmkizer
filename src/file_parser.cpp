@@ -63,7 +63,7 @@ std::tuple<bool, TargetData> parseTarget(std::string_view targetPath) {
         if (ext == ".dsp") {
             return dspTargetParse(targetPath);
         }
-        if (ext == ".proj") {
+        if (ext == ".vcproj") {
             return projTargetParse(targetPath);
         }
         if (ext == ".vcxproj") {

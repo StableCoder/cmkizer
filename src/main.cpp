@@ -97,7 +97,10 @@ int main(int argc, char **argv) {
     auto[targetSuccess, targetData] = parseTarget(argv[argc - 1]);
 
     if (targetSuccess) {
-        generateCMakeTarget(targetData, true);
+        ProjectData temp;
+        temp.targets.emplace_back(targetData);
+        temp = projectPreprocessing(temp);
+        generateCMakeTarget(temp.targets[0]);
     }
 
     return 0;
