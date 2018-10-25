@@ -2,20 +2,15 @@ cmake_minimum_required(VERSION 3.9)
 project(cmkizer CXX)
 
 include(cmake/c++-standards.cmake)
-include(cmake/clang-tools.cmake)
 include(cmake/code-coverage.cmake)
-include(cmake/sanitizer-builds.cmake)
+include(cmake/sanitizers.cmake)
+include(cmake/tools.cmake)
 
-# libxml2
+# Compiler Options
+cxx_17()
+
+# External Libraries
 find_package(LibXml2 REQUIRED)
-
-file(GLOB_RECURSE ALL_CODE_FILES
-    ${PROJECT_SOURCE_DIR}/src/*.[ch]pp
-)
-
-_Cxx17()
-_ClangFormat(cmkizer ${ALL_CODE_FILES})
-_ClangTidy(cmkizer ${ALL_CODE_FILES} -I${LIBXML2_INCLUDE_DIR})
 
 # Executable
 set(SOURCES
@@ -30,7 +25,7 @@ set(SOURCES
     src/main.cpp
 )
 
-_AddExecutable(cmkizer ${SOURCES})
+add_executable(cmkizer ${SOURCES})
 target_include_directories(cmkizer PRIVATE ${LIBXML2_INCLUDE_DIR})
 if(MSVC)
     target_link_libraries(cmkizer libxml2)
