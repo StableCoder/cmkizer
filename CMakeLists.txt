@@ -3,6 +3,7 @@ project(cmkizer CXX)
 
 include(cmake/c++-standards.cmake)
 include(cmake/code-coverage.cmake)
+include(cmake/default-output-dirs.cmake)
 include(cmake/sanitizers.cmake)
 include(cmake/tools.cmake)
 
@@ -10,10 +11,11 @@ include(cmake/tools.cmake)
 cxx_17()
 
 # External Libraries
-find_package(LibXml2 REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_MODULE_PATH})
+find_package(libxml2)
 
 # Executable
-set(SOURCES
+add_executable(cmkizer 
     src/generators.cpp
     src/file_parser.cpp
     src/util.cpp
@@ -24,11 +26,10 @@ set(SOURCES
     src/sln.cpp
     src/main.cpp
 )
-
-add_executable(cmkizer ${SOURCES})
-target_include_directories(cmkizer PRIVATE ${LIBXML2_INCLUDE_DIR})
-if(MSVC)
-    target_link_libraries(cmkizer libxml2)
+if(TARGET libxml2::libxml2)
+    target_link_libraries(cmkizer libxml2::libxml2)
 else()
-    target_link_libraries(cmkizer xml2)
+    find_package(LibXml2 REQUIRED)
+    target_include_directories(cmkizer PRIVATE ${LIBXML2_INCLUDE_DIRS})
+    target_link_libraries(cmkizer ${LIBXML2_LIBRARIES})
 endif()

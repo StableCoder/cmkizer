@@ -1,0 +1,9 @@
+[requires]
+libxml2/2.9.8@bincrafters/stable
+
+[generators]
+cmake_find_package
+
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./bin
