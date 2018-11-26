@@ -48,7 +48,7 @@ void printHelp() {
            "  --help      show this help\n");
 }
 
-void printVersion() { printf("cmkizer 17.0"); }
+void printVersion() { printf("cmkizer 18.11\n"); }
 
 int main(int argc, char **argv) {
     if (argc == 1) {
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
     }
 
     // The last one should be the file we're operating upon, attempt to open it.
-    auto[projSuccess, projData] = parseProject(argv[argc - 1]);
+    auto [projSuccess, projData] = parseProject(argv[argc - 1]);
 
     if (projSuccess) {
         projData = projectPreprocessing(projData);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    auto[targetSuccess, targetData] = parseTarget(argv[argc - 1]);
+    auto [targetSuccess, targetData] = parseTarget(argv[argc - 1]);
 
     if (targetSuccess) {
         ProjectData temp;
