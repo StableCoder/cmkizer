@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2017 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,22 @@
  *
  */
 
-// cmkizer
 #include "file_parser.hpp"
 #include "generators.hpp"
 #include "util.hpp"
 
-// C++
 #include <string>
 #include <string_view>
 
+void printVersion() { printf("cmkizer 18.11\n"); }
+
 void printHelp() {
-    printf("Usage: cmkizer [OPTION] [FILE]\n"
-           "A utility that guestimates from a visual studio solution a fairly "
+    printVersion();
+    printf("\nUsage:\n"
+           "  cmkizer [OPTIONS] <FILE.SLN>\n\n"
+           "A utility that guestimates from a Visual Studio solution a fairly "
            "close\n"
            "basic approximation of an equivalent cmake project and files.\n"
-           "Example: cmkizer -i \"MSVS Sol.sln\"\n"
            "\n"
            "  -qt <int>   specifies a Qt version to setup the project for\n"
            "  -v <str>    changes the string of the CMake version used(default "
@@ -45,10 +46,8 @@ void printHelp() {
            "  -i <str>    changes the include path for installing "
            "headers(default 'include/')\n"
            "  --version   print version number\n"
-           "  --help      show this help\n");
+           "  --help      show this help\n\n");
 }
-
-void printVersion() { printf("cmkizer 18.11\n"); }
 
 int main(int argc, char **argv) {
     if (argc == 1) {

@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2017 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -95,7 +95,7 @@ std::tuple<bool, ProjectData> slnProjectParse(std::string_view projectPath) {
             std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
             std::string fullPath = rootPath + relativePath;
 
-            auto[read, target] = parseTarget(fullPath);
+            auto [read, target] = parseTarget(fullPath);
 
             if (!read) {
                 printf("Error: Could not parse project file - %s\n", relativePath.data());

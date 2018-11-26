@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2017 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,8 @@
 #include <algorithm>
 #include <cstring>
 
-void determineLanguage(const std::string_view fileName, TargetData &data, FilterGroup &group) {
+void determineLanguage(std::string fileName, TargetData &data, FilterGroup &group) {
+    std::replace(fileName.begin(), fileName.end(), '\\', '/');
     std::string_view extension = fileName.data() + fileName.find_last_of('.') + 1;
 
     if (extension == "cpp" || extension == "CPP") {

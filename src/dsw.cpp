@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2017 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +69,7 @@ std::tuple<bool, ProjectData> dswProjectParse(std::string_view projectPath) {
             }
             std::string fullPath(rootPath + relativePath);
             std::replace(fullPath.begin(), fullPath.end(), '\\', '/');
-            auto[read, targetData] = parseTarget(fullPath);
+            auto [read, targetData] = parseTarget(fullPath);
 
             if (read) {
                 targetData.name = targetName;

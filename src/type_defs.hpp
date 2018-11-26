@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2017 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@
 #ifndef TYPE_DEFS_HPP
 #define TYPE_DEFS_HPP
 
-// C++
 #include <string>
 #include <vector>
 
