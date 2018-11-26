@@ -85,7 +85,7 @@ std::tuple<bool, ProjectData> slnProjectParse(std::string_view projectPath) {
             auto end = line.find('"', ++start);
             std::string name = line.substr(start, end - start);
 
-            if (name == "Build" && data.targets.empty()) {
+            if (name == "Solution Items" || (name == "Build" && data.targets.empty())) {
                 continue;
             }
 

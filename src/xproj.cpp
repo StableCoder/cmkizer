@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
+ *  Copyright (c) 2018 George Cave
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -56,9 +56,6 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
     auto end = targetPath.find_last_of('.');
     data.name = targetPath.substr(start, end - start);
 
-    // Root Properties
-    {}
-
     for (xmlNode *rootChild = rootNode->children; rootChild != rootNode->last;
          rootChild = rootChild->next) {
         std::string_view childName = (const char *)rootChild->name;
@@ -84,16 +81,34 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
                 }
 
             } else {
-                // File Group
+                // File/Project Reference Group
                 FilterGroup group;
 
                 for (xmlNode *fileNode = rootChild->children; fileNode != rootChild->last;
                      fileNode = fileNode->next) {
-                    std::string_view includeName =
-                        (const char *)xmlGetProp(fileNode, (const xmlChar *)"Include");
+                    std::string_view nodeName = (const char *)fileNode->name;
 
-                    if (!includeName.empty()) {
-                        determineLanguage({includeName.begin(), includeName.end()}, data, group);
+                    if (nodeName == "ProjectReference") {
+                        // It's a project dependency
+                        for (xmlNode *dependencyNode = fileNode->children;
+                             dependencyNode != fileNode->last;
+                             dependencyNode = dependencyNode->next) {
+                            std::string_view nodeName = (const char *)dependencyNode->name;
+
+                            if (nodeName == "Project") {
+                                data.dependencies.emplace_back(
+                                    (const char *)dependencyNode->children->content);
+                            }
+                        }
+                    } else {
+                        // It's a source/header file
+                        std::string_view includeName =
+                            (const char *)xmlGetProp(fileNode, (const xmlChar *)"Include");
+
+                        if (!includeName.empty()) {
+                            determineLanguage({includeName.begin(), includeName.end()}, data,
+                                              group);
+                        }
                     }
                 }
 

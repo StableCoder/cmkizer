@@ -25,10 +25,8 @@
 
 #include "generators.hpp"
 
-// cmkizer
 #include "util.hpp"
 
-// C++
 #include <algorithm>
 #include <cctype>
 #include <tuple>
@@ -88,8 +86,14 @@ ProjectData projectPreprocessing(ProjectData data) {
     // Link project dependencies
     for (auto &target : data.targets) {
         for (auto &dependency : target.dependencies) {
+            std::string comp1 = dependency;
+            std::transform(comp1.begin(), comp1.end(), comp1.begin(), ::toupper);
+
             for (auto &otherTarget : data.targets) {
-                if (otherTarget.displayName == dependency) {
+                std::string comp2 = otherTarget.displayName;
+                std::transform(comp2.begin(), comp2.end(), comp2.begin(), ::toupper);
+
+                if (comp1 == comp2) {
                     for (auto &config : target.configs) {
                         config.linkLibraries.emplace_back(otherTarget.name);
                     }
