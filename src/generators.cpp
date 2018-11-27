@@ -103,66 +103,6 @@ ProjectData projectPreprocessing(ProjectData data) {
         }
     }
 
-    // Collapse target configs that are the same
-    for (auto &target : data.targets) {
-        for (auto config = target.configs.begin(); config != target.configs.end(); ++config) {
-            for (auto otherConfig = config + 1; otherConfig < target.configs.end(); ++otherConfig) {
-                if (config->name == otherConfig->name &&
-                    config->definitions.size() == otherConfig->definitions.size() &&
-                    config->includes.size() == otherConfig->includes.size() &&
-                    config->linkLibraries.size() == otherConfig->linkLibraries.size()) {
-                    bool same = true;
-
-                    // Compare includes
-                    for (auto &it : config->includes) {
-                        bool found = false;
-                        for (auto &otherIt : otherConfig->includes) {
-                            if (it == otherIt) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            same = false;
-                        }
-                    }
-
-                    // Compare definitions
-                    for (auto &it : config->definitions) {
-                        bool found = false;
-                        for (auto &otherIt : otherConfig->definitions) {
-                            if (it == otherIt) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            same = false;
-                        }
-                    }
-
-                    // Compare libraries
-                    for (auto &it : config->linkLibraries) {
-                        bool found = false;
-                        for (auto &otherIt : otherConfig->linkLibraries) {
-                            if (it == otherIt) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            same = false;
-                        }
-                    }
-
-                    if (same) {
-                        target.configs.erase(otherConfig);
-                    }
-                }
-            }
-        }
-    }
-
     // Convert include paths to correct slash format
     for (auto &target : data.targets) {
         for (auto &config : target.configs) {
@@ -403,35 +343,8 @@ void generateCMakeTarget(const TargetData &data, FILE *pOutfile) {
             fprintf(pOut, " )\n");
         }
 
-        // targets
-        /*
-        fprintf(pOut, "\n    install(\n");
-        fprintf(pOut, "            TARGETS %s\n", it.name.data());
-        fprintf(pOut, "            RUNTIME DESTINATION bin\n");
-        fprintf(pOut, "            COMPONENT binaries\n");
-        fprintf(pOut, "            LIBRARY DESTINATION lib\n");
-        fprintf(pOut, "            ARCHIVE DESTINATION lib\n");
-        fprintf(pOut, "            COMPONENT libraries\n    )\n");
-        */
-
         fprintf(pOut, "endif()\n");
     }
-    /*
-    // Install
-    fprintf(pOut, "\n# Install\n");
-    // h
-    fprintf(pOut, "install(\n");
-    fprintf(pOut, "        DIRECTORY ./\n");
-    fprintf(pOut, "        DESTINATION %s\n", gGlobalSettings.includePath.data());
-    fprintf(pOut, "        COMPONENT headers\n");
-    fprintf(pOut, "        FILES MATCHING PATTERN \"*.h\"\n)\n");
-    // hpp
-    fprintf(pOut, "\ninstall(\n");
-    fprintf(pOut, "        DIRECTORY ./\n");
-    fprintf(pOut, "        DESTINATION %s\n", gGlobalSettings.includePath.data());
-    fprintf(pOut, "        COMPONENT headers\n");
-    fprintf(pOut, "        FILES MATCHING PATTERN \"*.hpp\"\n)\n");
-    */
 
     if (pOutfile == nullptr) {
         fclose(pOut);
