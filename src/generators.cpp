@@ -241,6 +241,7 @@ void generateCMakeTarget(const TargetData &data,
             std::string temp = it;
             std::replace(temp.begin(), temp.end(), ' ', '_');
             std::replace(temp.begin(), temp.end(), '/', '_');
+            std::replace(temp.begin(), temp.end(), '\\', '_');
             std::transform(temp.begin(), temp.end(), temp.begin(),
                            [](unsigned char c) { return std::toupper(c); });
 
@@ -278,6 +279,7 @@ void generateCMakeTarget(const TargetData &data,
             std::string temp(it);
             std::replace(temp.begin(), temp.end(), ' ', '_');
             std::replace(temp.begin(), temp.end(), '/', '_');
+            std::replace(temp.begin(), temp.end(), '\\', '_');
             std::transform(temp.begin(), temp.end(), temp.begin(),
                            [](unsigned char c) { return std::toupper(c); });
 
@@ -307,6 +309,7 @@ void generateCMakeTarget(const TargetData &data,
                 std::string temp(it);
                 std::replace(temp.begin(), temp.end(), ' ', '_');
                 std::replace(temp.begin(), temp.end(), '/', '_');
+                std::replace(temp.begin(), temp.end(), '\\', '_');
                 std::transform(temp.begin(), temp.end(), temp.begin(),
                                [](unsigned char c) { return std::toupper(c); });
 

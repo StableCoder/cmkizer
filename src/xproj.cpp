@@ -45,7 +45,12 @@ void parseFilter(xmlNode *itemNode, TargetData &data) noexcept {
         if (nodeName == "Filter") {
             std::string filterName = (char const *)filterNode->children->content;
 
-            std::replace(filterName.begin(), filterName.end(), '\\', '/');
+            for (auto it = filterName.begin(); it != filterName.end(); ++it) {
+                if (*it == '\\') {
+                    it = filterName.insert(it, '\\');
+                    ++it;
+                }
+            }
 
             determineLanguage({includeProp.begin(), includeProp.end()}, data,
                               data.filters[filterName]);
