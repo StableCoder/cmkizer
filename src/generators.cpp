@@ -303,7 +303,7 @@ void generateCMakeTarget(const TargetData &data,
             fprintf(pOut, "    add_executable( %s", data.name.data());
         }
         for (auto &[it, filter] : data.filters) {
-            if (!filter.files.empty() && (filter.sources || filter.objects)) {
+            if (!filter.files.empty()) {
                 std::string temp(it);
                 std::replace(temp.begin(), temp.end(), ' ', '_');
                 std::replace(temp.begin(), temp.end(), '/', '_');
