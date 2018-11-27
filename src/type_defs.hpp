@@ -26,26 +26,32 @@
 #ifndef TYPE_DEFS_HPP
 #define TYPE_DEFS_HPP
 
+#include <map>
 #include <string>
 #include <vector>
 
 /// A grouping of files together, separated as source, header and resource
 /// files.
 struct FilterGroup {
-    std::string name;
-    std::vector<std::string> sourceFiles;
-    std::vector<std::string> headerFiles;
-    std::vector<std::string> resourceFiles;
+    /// List of files part of this filter group
+    std::vector<std::string> files;
+    /// True if there are sources to be compiled within this group
+    bool sources{false};
+    /// True if there are objects to be linked within this group
+    bool objects{false};
 };
 
 /// A particular configuration of a target, including lists for the particular
 /// includes, libraries and definitions.
 struct TargetConfig {
-    std::string name;
-    std::string description;
+    /// List of definitions
     std::vector<std::string> definitions;
-    std::vector<std::string> includes;
+    /// List of include directories
+    std::vector<std::string> includeDirs;
+    /// List of libraries to be linked
     std::vector<std::string> linkLibraries;
+    /// List of directores containing libraries
+    std::vector<std::string> linkDirs;
 };
 
 /// A full target's information, including the file's location, the configs,
@@ -55,8 +61,10 @@ struct TargetData {
     std::string displayName;
     std::string fullPath;
     std::string relativePath;
-    std::vector<TargetConfig> configs;
-    std::vector<FilterGroup> groups;
+    /// All the files of the target
+    std::vector<std::string> allFiles;
+    std::map<std::string, TargetConfig> configs;
+    std::map<std::string, FilterGroup> filters;
     std::vector<std::string> dependencies;
     bool enableC = false;
     bool enableCXX = false;
@@ -68,15 +76,18 @@ struct TargetData {
 
 /// A full project's information.
 struct ProjectData {
+    /// Name of the whole project
     std::string name;
+    /// The path as to where the project is located
     std::string path;
+    /// The set of targets within the project
     std::vector<TargetData> targets;
 };
 
 struct GlobalSettings {
     int qtVersion = 0;
     std::string includePath = "include/";
-    std::string cmakeVersion = "3.9";
+    std::string cmakeVersion = "3.13";
     int cpackType = 0;
 };
 

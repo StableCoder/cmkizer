@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2018 George Cave
+ *  Copyright (c) 2018 George Cave <gcave@stablecoder.ca>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,139 @@
 
 #include "xproj.hpp"
 
-// cmkizer
-#include "util.hpp"
-
-// libxml2
 #include <libxml/parser.h>
 
-// C++
 #include <algorithm>
+#include <filesystem>
+#include <map>
+#include <string>
+
+#include "util.hpp"
+
+void parseFilter(xmlNode *itemNode, TargetData &data) noexcept {
+
+    std::string_view includeProp = (const char *)xmlGetProp(itemNode, (const xmlChar *)"Include");
+
+    for (xmlNode *filterNode = itemNode->children; filterNode != nullptr;
+         filterNode = filterNode->next) {
+        std::string_view nodeName = (char const *)filterNode->name;
+
+        if (nodeName == "Filter") {
+            std::string filterName = (char const *)filterNode->children->content;
+
+            std::replace(filterName.begin(), filterName.end(), '\\', '/');
+
+            determineLanguage({includeProp.begin(), includeProp.end()}, data,
+                              data.filters[filterName]);
+        }
+    }
+}
+
+void parseFiltersFile(std::string_view path, TargetData &data) noexcept {
+    std::string filtersFilePath = path.data();
+    filtersFilePath += ".filters";
+
+    if (!std::filesystem::exists(filtersFilePath))
+        return;
+
+    xmlDoc *document = xmlReadFile(filtersFilePath.data(), nullptr, 0);
+    if (document == nullptr)
+        return;
+
+    xmlNode *rootNode = xmlDocGetRootElement(document);
+    if (rootNode == nullptr) {
+        return;
+    }
+
+    for (xmlNode *groupNode = rootNode->children; groupNode != nullptr;
+         groupNode = groupNode->next) {
+        std::string_view nodeName = (char const *)groupNode->name;
+
+        if (nodeName == "ItemGroup") {
+            for (xmlNode *filterNode = groupNode->children; filterNode != nullptr;
+                 filterNode = filterNode->next) {
+                std::string_view nodeName = (char const *)filterNode->name;
+
+                if (nodeName == "ClCompile" || nodeName == "ClInclude" ||
+                    nodeName == "ResourceCompile") {
+                    parseFilter(filterNode, data);
+                }
+            }
+        }
+    }
+}
+
+void parseProjectConfigurations(xmlNode *node, TargetData &data) noexcept {
+    for (xmlNode *childNode = node->children; childNode != nullptr; childNode = childNode->next) {
+        std::string_view nodeName = (char const *)childNode->name;
+
+        if (nodeName == "ProjectConfiguration") {
+            std::string includeProp =
+                (char const *)xmlGetProp(childNode, (const xmlChar *)"Include");
+
+            data.configs[includeProp];
+        }
+    }
+}
+
+void parseClCompile(xmlNode *node, TargetConfig &config) noexcept {
+    for (xmlNode *childNode = node->children; childNode != nullptr; childNode = childNode->next) {
+        std::string_view childName = (char const *)childNode->name;
+
+        if (childName == "PreprocessorDefinitions") {
+            auto defs = parseDefinitions((char const *)childNode->children->content);
+
+            if (!defs.empty()) {
+                config.definitions = defs;
+            }
+        }
+    }
+}
+
+void parseLink(xmlNode *node, TargetConfig &config) noexcept {
+    for (xmlNode *childNode = node->children; childNode != nullptr; childNode = childNode->next) {
+        std::string_view childName = (char const *)childNode->name;
+
+        if (childName == "AdditionalDependencies") {
+            auto defs = parseDefinitions((char const *)childNode->children->content);
+
+            if (!defs.empty()) {
+                config.linkLibraries = defs;
+            }
+        } else if (childName == "AdditionalLibraryDirectories") {
+            auto defs = parseDefinitions((char const *)childNode->children->content);
+
+            if (!defs.empty()) {
+                config.linkDirs = defs;
+            }
+        }
+    }
+}
+
+void parseItemDefinitionGroup(xmlNode *node, TargetData &data) noexcept {
+    std::string conditionProp = (char const *)xmlGetProp(node, (const xmlChar *)"Condition");
+
+    for (auto &[name, config] : data.configs) {
+        if (conditionProp.find(name) != std::string::npos) {
+            for (xmlNode *childNode = node->children; childNode != nullptr;
+                 childNode = childNode->next) {
+                std::string_view childName = (char const *)childNode->name;
+
+                if (childName == "ClCompile") {
+                    parseClCompile(childNode, config);
+                } else if (childName == "Link") {
+                    parseLink(childNode, config);
+                }
+            }
+        }
+    }
+}
 
 std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
     TargetData data;
     data.fullPath = targetPath;
+
+    parseFiltersFile(targetPath, data);
 
     xmlDoc *document = xmlReadFile(targetPath.data(), nullptr, 0);
     if (document == nullptr) {
@@ -65,24 +186,10 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
                 (const char *)xmlGetProp(rootChild, (const xmlChar *)"Label");
 
             if (itemGroupLabel == "ProjectConfigurations") {
-                // Project Configurations
-
-                for (xmlNode *projConfig = rootChild->children; projConfig != rootChild->last;
-                     projConfig = projConfig->next) {
-                    std::string_view nodeName = (const char *)projConfig->name;
-
-                    if (nodeName == "ProjectConfiguration") {
-                        TargetConfig config;
-                        config.name = data.name;
-                        config.description =
-                            (const char *)xmlGetProp(projConfig, (const xmlChar *)"Include");
-                        data.configs.emplace_back(std::move(config));
-                    }
-                }
+                parseProjectConfigurations(rootChild, data);
 
             } else {
                 // File/Project Reference Group
-                FilterGroup group;
 
                 for (xmlNode *fileNode = rootChild->children; fileNode != rootChild->last;
                      fileNode = fileNode->next) {
@@ -105,15 +212,12 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
                         std::string_view includeName =
                             (const char *)xmlGetProp(fileNode, (const xmlChar *)"Include");
 
-                        if (!includeName.empty()) {
-                            determineLanguage({includeName.begin(), includeName.end()}, data,
-                                              group);
-                        }
+                        if (!includeName.empty())
+                            data.allFiles.emplace_back(includeName);
                     }
                 }
-
-                data.groups.emplace_back(std::move(group));
             }
+
         } else if (childName == "PropertyGroup") {
             std::string_view temp = (const char *)xmlGetProp(rootChild, (const xmlChar *)"Label");
             // Property Group - Globals
@@ -128,8 +232,8 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
             } else if (temp == "Configuration") {
                 std::string_view condition =
                     (const char *)xmlGetProp(rootChild, (const xmlChar *)"Condition");
-                for (auto &config : data.configs) {
-                    if (condition.find(config.description) != std::string::npos) {
+                for (auto &[name, config] : data.configs) {
+                    if (condition.find(name) != std::string::npos) {
                         for (xmlNode *configNode = rootChild->children;
                              configNode != rootChild->last; configNode = configNode->next) {
                             std::string_view nodeName = (const char *)configNode->name;
@@ -145,6 +249,8 @@ std::tuple<bool, TargetData> xprojTargetParse(std::string_view targetPath) {
                     }
                 }
             }
+        } else if (childName == "ItemDefinitionGroup") {
+            parseItemDefinitionGroup(rootChild, data);
         }
     }
 

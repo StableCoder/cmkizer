@@ -35,28 +35,32 @@ void determineLanguage(std::string fileName, TargetData &data, FilterGroup &grou
 
     if (extension == "cpp" || extension == "CPP") {
         data.enableCXX = true;
-        group.sourceFiles.emplace_back(fileName);
+        group.sources = true;
     } else if (extension == "cxx" || extension == "CXX") {
         data.enableC = true;
-        group.sourceFiles.emplace_back(fileName);
+        group.sources = true;
     } else if (extension == "c" || extension == "C") {
         data.enableC = true;
-        group.sourceFiles.emplace_back(fileName);
+        group.sources = true;
     } else if (extension == "for" || extension == "FOR") {
         data.enableFortran = true;
-        group.sourceFiles.emplace_back(fileName);
+        group.sources = true;
     } else if (extension == "hpp" || extension == "h") {
         data.enableCXX = true;
-        group.headerFiles.emplace_back(fileName);
     } else if (extension == "hxx" || extension == "HXX") {
         data.enableCXX = true;
-        group.headerFiles.emplace_back(fileName);
     } else if (extension == "h" || extension == "H") {
-        group.headerFiles.emplace_back(fileName);
     } else if (extension == "fi" || extension == "FI") {
         data.enableFortran = true;
-        group.headerFiles.emplace_back(fileName);
+    } else if (extension == "lib" || extension == "LIB") {
+        group.objects = true;
+    } else if (extension == "obj" || extension == "OBJ") {
+        group.objects = true;
+    } else if (extension == "rc" || extension == "RC") {
+        group.sources = true;
     }
+
+    group.files.emplace_back(fileName);
 }
 
 bool checkIsLibrary(const std::string_view outputName) {
@@ -89,7 +93,8 @@ std::vector<std::string> parseItems(const std::string_view items) {
 void removeDefaultDefinitions(std::vector<std::string> &definitionList) {
     for (auto it = definitionList.begin(); it != definitionList.end();) {
         if (*it == "WIN32" || *it == "_DEBUG" || *it == "NDEBUG" || *it == "_WINDOWS" ||
-            *it == "_USRDLL" || *it == "__linux__") {
+            *it == "_USRDLL" || *it == "__linux__" || it->find("%(") != std::string::npos ||
+            it->find("$(") != std::string::npos) {
             definitionList.erase(it);
         } else {
             ++it;
@@ -105,4 +110,24 @@ void removeDefaultIncludes(std::vector<std::string> &includeList) {
             ++it;
         }
     }
+}
+
+std::vector<std::string> parseDefinitions(std::string_view definitions) noexcept {
+    std::vector<std::string> retList;
+    auto begin = definitions.data();
+
+    auto const endIt = begin + definitions.size();
+    for (auto it = definitions.data(); it != endIt; ++it) {
+        if (*it == ';') {
+            // Found an end, parse
+            retList.emplace_back(begin, it);
+            begin = it + 1;
+        }
+    }
+
+    retList.emplace_back(begin, endIt);
+
+    removeDefaultDefinitions(retList);
+
+    return retList;
 }

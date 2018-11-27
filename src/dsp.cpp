@@ -50,10 +50,8 @@ std::tuple<bool, TargetData> dspTargetParse(std::string_view filePath) {
         // File Filter
         if (line.find("# Begin Group \"") != std::string::npos) {
             line.erase(0, strlen("# Begin Group \""));
-            FilterGroup newGroup;
-            newGroup.name = line.substr(0, line.find('\"'));
-            data.groups.push_back(newGroup);
-            activeFilter = &*(data.groups.end() - 1);
+            data.filters[line.substr(0, line.find('\"'))];
+            activeFilter = &data.filters[line.substr(0, line.find('\"'))];
         }
 
         // Files

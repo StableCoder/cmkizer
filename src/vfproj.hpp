@@ -23,33 +23,18 @@
  *
  */
 
-#ifndef GENERATORS_HPP
-#define GENERATORS_HPP
+#ifndef VFPROJ_HPP
+#define VFPROJ_HPP
 
-// cmkizer
 #include "type_defs.hpp"
 
-// C++
 #include <string>
+#include <tuple>
 
-/// Preprocesses a project's data to fill in any gaps/holes in data as best as
-/// can be guessed, aswell as links up dependencies between targets.
-/// \param data The ProjectData to process.
-/// \return A processed ProjectData struct.
-ProjectData projectPreprocessing(ProjectData data, GlobalSettings const &globalSettings);
+/** @brief Parses a vfproj target file, typically for intel Fortran plugins to Visual Studio
+ * @param targetPath The path representing the file to parse
+ * @return A boolean representing th parse success, and the associated parsed TargetData
+ */
+std::tuple<bool, TargetData> vfprojTargetParse(std::string_view targetPath) noexcept;
 
-/// Generates a CMake file using the provided project data
-/// \param projectData The data to use to construct the CMake file.
-void generateCMakeProject(const ProjectData &projectData, GlobalSettings const &globalSettings);
-
-/// Generates a CMake file using the provided target data.
-/// \param data The TargetData to use.
-/// \param standalone If true, then the target is written as if a standalone
-/// project/target combination.
-/// \param pOutfile If specified, then this will be file the output is written
-/// to.
-void generateCMakeTarget(const TargetData &data,
-                         GlobalSettings const &globalSettings,
-                         FILE *pOutfile = nullptr);
-
-#endif // GENERATORS_HPP
+#endif // VFPROJ_HPP

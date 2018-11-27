@@ -34,8 +34,6 @@
 #include <string>
 #include <vector>
 
-static GlobalSettings gGlobalSettings;
-
 /// Determines, using the file's extension whether the file is a header, source,
 /// or resource file.
 ///
@@ -65,5 +63,7 @@ void removeDefaultDefinitions(std::vector<std::string> &definitionList);
 /// Removes typical default include paths from MSVS
 /// \param includeList The list of includes to purify.
 void removeDefaultIncludes(std::vector<std::string> &includeList);
+
+std::vector<std::string> parseDefinitions(std::string_view definitions) noexcept;
 
 #endif // UTIL_HPP

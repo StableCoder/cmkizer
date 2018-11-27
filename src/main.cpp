@@ -42,7 +42,7 @@ void printHelp() {
            "\n"
            "  -qt <int>   specifies a Qt version to setup the project for\n"
            "  -v <str>    changes the string of the CMake version used(default "
-           "'3.9')\n"
+           "'3.13')\n"
            "  -i <str>    changes the include path for installing "
            "headers(default 'include/')\n"
            "  --version   print version number\n"
@@ -54,6 +54,8 @@ int main(int argc, char **argv) {
         printHelp();
         return 0;
     }
+
+    GlobalSettings globalSettings;
 
     // Process the command line arguments, if any.
     for (int idx = 1; idx < argc; ++idx) {
@@ -68,19 +70,19 @@ int main(int argc, char **argv) {
             return 0;
         }
         if (arg == "-qt" && idx < argc) {
-            gGlobalSettings.qtVersion = std::stoi(argv[idx + 1]);
+            globalSettings.qtVersion = std::stoi(argv[idx + 1]);
         }
         if (arg == "-v" && idx < argc) {
-            gGlobalSettings.cmakeVersion = argv[idx + 1];
+            globalSettings.cmakeVersion = argv[idx + 1];
         }
         if (arg == "-i" && idx < argc) {
-            gGlobalSettings.includePath = argv[idx + 1];
+            globalSettings.includePath = argv[idx + 1];
         }
         if (arg == "-p") {
-            gGlobalSettings.cpackType = 1;
+            globalSettings.cpackType = 1;
         }
         if (arg == "-d") {
-            gGlobalSettings.cpackType = 2;
+            globalSettings.cpackType = 2;
         }
     }
 
@@ -88,8 +90,8 @@ int main(int argc, char **argv) {
     auto [projSuccess, projData] = parseProject(argv[argc - 1]);
 
     if (projSuccess) {
-        projData = projectPreprocessing(projData);
-        generateCMakeProject(projData);
+        projData = projectPreprocessing(projData, globalSettings);
+        generateCMakeProject(projData, globalSettings);
         return 0;
     }
 
@@ -98,8 +100,8 @@ int main(int argc, char **argv) {
     if (targetSuccess) {
         ProjectData temp;
         temp.targets.emplace_back(targetData);
-        temp = projectPreprocessing(temp);
-        generateCMakeTarget(temp.targets[0]);
+        temp = projectPreprocessing(temp, globalSettings);
+        generateCMakeTarget(temp.targets[0], globalSettings);
     }
 
     return 0;

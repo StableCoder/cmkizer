@@ -113,7 +113,7 @@ std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
                                 temp = (const char *)xmlGetProp(
                                     toolNode, (const xmlChar *)"AdditionalIncludeDirectories");
                                 if (temp != nullptr) {
-                                    config.includes = parseItems(temp);
+                                    config.includeDirs = parseItems(temp);
                                 }
                             } else if (toolName == "VCLinkerTool" || toolName == "VFLinkerTool") {
                                 auto temp = (const char *)xmlGetProp(toolNode,
@@ -139,11 +139,6 @@ std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
 
                 if (filterNodeName == "Filter") { // Filter Properties
                     FilterGroup group;
-                    group.name = (const char *)xmlGetProp(filterNode, (const xmlChar *)"Name");
-                    std::replace(group.name.begin(), group.name.end(), ' ', '_');
-                    std::transform(
-                        group.name.begin(), group.name.end(), group.name.begin(),
-                        [](unsigned char c) -> unsigned char { return std::toupper(c); });
 
                     for (xmlNode *fileNode = filterNode->children; fileNode != filterNode->last;
                          fileNode = fileNode->next) {
@@ -159,7 +154,8 @@ std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
                             determineLanguage(fileName, data, group);
                         }
                     }
-                    data.groups.emplace_back(std::move(group));
+                    data.filters[(const char *)xmlGetProp(filterNode, (const xmlChar *)"Name")] =
+                        std::move(group);
                 }
             }
         }
