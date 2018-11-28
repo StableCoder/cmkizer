@@ -16,7 +16,7 @@ variables:
     - docker-linux
   script:
     - mkdir build && cd build
-    - conan install ..
+    - conan install .. --build missing
     - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -DNO_VULKAN_DEVICE=ON -DBUILD_WINDOW_TESTS=OFF ${CMAKE_OPTIONS}
     - ninja
 
@@ -30,7 +30,7 @@ variables:
     - echo 'Copy-Item C:\workdir\* -Destination C:\workdir-cpy -Recurse' | out-file -encoding utf8 -append build.ps1
     - echo 'cd workdir-cpy' | out-file -encoding utf8 -append build.ps1
     - echo 'mkdir build; cd build' | out-file -encoding utf8 -append build.ps1
-    - echo 'conan install ..' | out-file -encoding utf8 -append build.ps1
+    - echo 'conan install .. --build missing' | out-file -encoding utf8 -append build.ps1
     - echo "cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -DNO_VULKAN_DEVICE=ON -DBUILD_WINDOW_TESTS=OFF $env:CMAKE_OPTIONS" | out-file -encoding utf8 -append build.ps1
     - echo 'if(-not $?){throw}' | out-file -encoding utf8 -append build.ps1
     - echo 'ninja' | out-file -encoding utf8 -append build.ps1
@@ -99,7 +99,7 @@ Windows/Clang-cl:
     - docker-linux
   script:
     - mkdir build && cd build
-    - conan install ..
+    - conan install .. --build missing
     - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCODE_COVERAGE=ON -DBUILD_TESTS=ON -DNO_VULKAN_DEVICE=ON -DBUILD_WINDOW_TESTS=OFF
     - ninja
     - ninja ccov
@@ -120,7 +120,7 @@ Windows/Clang-cl:
     - docker-linux
   script:
     - mkdir build && cd build
-    - conan install ..
+    - conan install .. --build missing
     - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -DNO_VULKAN_DEVICE=ON -DBUILD_WINDOW_TESTS=OFF ${CMAKE_OPTIONS}
     - ninja
 
