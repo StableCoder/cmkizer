@@ -27,7 +27,6 @@ add_executable(cmkizer
     src/sln.cpp
     src/main.cpp
 )
-target_link_libraries(cmkizer PRIVATE stdc++fs)
 
 if(TARGET libxml2::libxml2)
     target_link_libraries(cmkizer PRIVATE libxml2::libxml2)

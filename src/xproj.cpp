@@ -28,7 +28,6 @@
 #include <libxml/parser.h>
 
 #include <algorithm>
-#include <filesystem>
 #include <map>
 #include <string>
 
@@ -61,9 +60,6 @@ void parseFilter(xmlNode *itemNode, TargetData &data) noexcept {
 void parseFiltersFile(std::string_view path, TargetData &data) noexcept {
     std::string filtersFilePath = path.data();
     filtersFilePath += ".filters";
-
-    if (!std::filesystem::exists(filtersFilePath))
-        return;
 
     xmlDoc *document = xmlReadFile(filtersFilePath.data(), nullptr, 0);
     if (document == nullptr)
