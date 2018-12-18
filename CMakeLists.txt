@@ -21,7 +21,7 @@ add_executable(cmkizer
     src/util.cpp
     src/dsp.cpp
     src/dsw.cpp
-#    src/proj.cpp
+    src/proj.cpp
     src/xproj.cpp
     src/vfproj.cpp
     src/sln.cpp

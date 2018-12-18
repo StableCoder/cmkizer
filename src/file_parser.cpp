@@ -27,7 +27,7 @@
 #include "file_parser.hpp"
 #include "dsp.hpp"
 #include "dsw.hpp"
-//#include "proj.hpp"
+#include "proj.hpp"
 #include "sln.hpp"
 #include "vfproj.hpp"
 #include "xproj.hpp"
@@ -65,7 +65,7 @@ std::tuple<bool, TargetData> parseTarget(std::string_view targetPath) {
             return dspTargetParse(targetPath);
         }
         if (ext == ".vcproj") {
-            // return projTargetParse(targetPath);
+            return projTargetParse(targetPath);
         }
         if (ext == ".vcxproj") {
             return xprojTargetParse(targetPath);

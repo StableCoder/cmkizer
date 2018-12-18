@@ -83,9 +83,7 @@ std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
 
                 if (configNodeName == "Configuration") {
                     TargetConfig config;
-                    config.name = data.name;
-                    config.description =
-                        (const char *)xmlGetProp(configNode, (const xmlChar *)"Name");
+
                     auto temp =
                         (const char *)xmlGetProp(configNode, (const xmlChar *)"ConfigurationType");
                     if (temp != nullptr) {
@@ -129,7 +127,8 @@ std::tuple<bool, TargetData> projTargetParse(std::string_view targetPath) {
                             }
                         }
                     }
-                    data.configs.emplace_back(std::move(config));
+                    data.configs[(const char *)xmlGetProp(configNode, (const xmlChar *)"Name")] =
+                        std::move(config);
                 }
             }
         } else if (rootChildName == "Files") {

@@ -36,7 +36,7 @@
 /// can be guessed, aswell as links up dependencies between targets.
 /// \param data The ProjectData to process.
 /// \return A processed ProjectData struct.
-ProjectData projectPreprocessing(ProjectData data, GlobalSettings const &globalSettings);
+ProjectData projectPreprocessing(ProjectData data, GlobalSettings &globalSettings);
 
 /// Generates a CMake file using the provided project data
 /// \param projectData The data to use to construct the CMake file.

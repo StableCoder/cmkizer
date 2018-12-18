@@ -31,7 +31,7 @@
 #include <cctype>
 #include <tuple>
 
-ProjectData projectPreprocessing(ProjectData data, GlobalSettings const &globalSettings) {
+ProjectData projectPreprocessing(ProjectData data, GlobalSettings &globalSettings) {
     if (data.targets.empty()) {
         // Do nothing, there are no targets.
         return data;
@@ -118,31 +118,33 @@ ProjectData projectPreprocessing(ProjectData data, GlobalSettings const &globalS
     }
 
     // Check for QT items
-    if (globalSettings.qtVersion != 0) {
-        for (auto &target : data.targets) {
-            for (auto &[it, filter] : target.filters) {
-                // Check file for QT MOC/UIC/RCC options.
+    for (auto &target : data.targets) {
+        for (auto &[it, filter] : target.filters) {
+            // Check file for QT MOC/UIC/RCC options.
 
-                auto qtFile = filter.files.begin();
-                while (qtFile != filter.files.end()) {
-                    auto start = qtFile->find_last_of('/');
-                    if (start == std::string::npos) {
-                        start = 0;
-                    } else {
-                        ++start;
-                    }
-                    auto end = qtFile->find_last_of('.');
-                    std::string_view fileName(qtFile->data() + start, end - start);
-                    std::string_view ext = qtFile->data() + end;
-
-                    if (fileName.substr(0, 4) == "moc_" || ext == ".moc" ||
-                        fileName.substr(0, 4) == "qrc_" || ext == ".qrc" ||
-                        fileName.substr(0, 3) == "ui_" || ext == ".ui") {
-                        target.useQt = true;
-                    }
-
-                    ++qtFile;
+            auto qtFile = filter.files.begin();
+            while (qtFile != filter.files.end()) {
+                auto start = qtFile->find_last_of('/');
+                if (start == std::string::npos) {
+                    start = 0;
+                } else {
+                    ++start;
                 }
+                auto end = qtFile->find_last_of('.');
+                std::string_view fileName(qtFile->data() + start, end - start);
+                std::string_view ext = qtFile->data() + end;
+
+                if (fileName.find("moc_") != std::string::npos || ext == ".moc" ||
+                    fileName.find("qrc_") != std::string::npos || ext == ".qrc" ||
+                    fileName.find("ui_") != std::string::npos || ext == ".ui") {
+                    target.useQt = true;
+
+                    if (globalSettings.qtVersion == 0) {
+                        globalSettings.qtVersion = 5;
+                    }
+                }
+
+                ++qtFile;
             }
         }
     }
