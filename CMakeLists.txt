@@ -19,8 +19,8 @@ add_executable(cmkizer
     src/generators.cpp
     src/file_parser.cpp
     src/util.cpp
-#    src/dsp.cpp
-#    src/dsw.cpp
+    src/dsp.cpp
+    src/dsw.cpp
 #    src/proj.cpp
     src/xproj.cpp
     src/vfproj.cpp

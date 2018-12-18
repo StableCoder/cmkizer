@@ -31,6 +31,8 @@
 
 void determineLanguage(std::string fileName, TargetData &data, FilterGroup &group) {
     std::replace(fileName.begin(), fileName.end(), '\\', '/');
+    // VS6 has a nasty habit of leaving \r at the end.
+    fileName.erase(std::remove(fileName.begin(), fileName.end(), '\r'), fileName.end());
     std::string_view extension = fileName.data() + fileName.find_last_of('.') + 1;
 
     if (extension == "cpp" || extension == "CPP") {
@@ -46,12 +48,9 @@ void determineLanguage(std::string fileName, TargetData &data, FilterGroup &grou
         data.enableFortran = true;
         group.sources = true;
     } else if (extension == "hpp" || extension == "h") {
-        data.enableCXX = true;
     } else if (extension == "hxx" || extension == "HXX") {
-        data.enableCXX = true;
     } else if (extension == "h" || extension == "H") {
     } else if (extension == "fi" || extension == "FI") {
-        data.enableFortran = true;
     } else if (extension == "lib" || extension == "LIB") {
         group.objects = true;
     } else if (extension == "obj" || extension == "OBJ") {

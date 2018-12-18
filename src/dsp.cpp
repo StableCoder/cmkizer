@@ -75,10 +75,7 @@ std::tuple<bool, TargetData> dspTargetParse(std::string_view filePath) {
             } else {
                 line.erase(0, strlen("!ELSEIF  \"$(CFG)\" == \""));
             }
-            TargetConfig newConfig;
-            newConfig.description = line.substr(0, line.length() - 1);
-            data.configs.push_back(newConfig);
-            activeConfig = &*(data.configs.end() - 1);
+            activeConfig = &(data.configs[line.substr(0, line.length() - 1)]);
         } else if (line.find("# PROP Use_MFC ") != std::string::npos) {
             line.erase(0, strlen("# PROP Use_MFC "));
             data.useMFC = std::stoi(line);
@@ -118,7 +115,7 @@ std::tuple<bool, TargetData> dspTargetParse(std::string_view filePath) {
                         curSelection.erase(0, lastSlash);
                     }
                     data.isLibrary = checkIsLibrary(curSelection);
-                    activeConfig->name = curSelection.substr(0, curSelection.find_last_of('.'));
+                    // activeConfig->name = curSelection.substr(0, curSelection.find_last_of('.'));
                 } else if (curSelection.find(".lib") != std::string::npos ||
                            curSelection.find(".LIB") != std::string::npos ||
                            curSelection.find(".dll") != std::string::npos ||

@@ -25,8 +25,8 @@
 
 // cmkizer
 #include "file_parser.hpp"
-//#include "dsp.hpp"
-//#include "dsw.hpp"
+#include "dsp.hpp"
+#include "dsw.hpp"
 //#include "proj.hpp"
 #include "sln.hpp"
 #include "vfproj.hpp"
@@ -45,7 +45,7 @@ std::tuple<bool, ProjectData> parseProject(std::string_view projectPath) {
         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
         if (ext == ".dsw") {
-            // return dswProjectParse(projectPath);
+            return dswProjectParse(projectPath);
         }
         if (ext == ".sln") {
             return slnProjectParse(projectPath);
@@ -62,7 +62,7 @@ std::tuple<bool, TargetData> parseTarget(std::string_view targetPath) {
         std::string ext = targetPath.data() + lastDot;
 
         if (ext == ".dsp") {
-            // return dspTargetParse(targetPath);
+            return dspTargetParse(targetPath);
         }
         if (ext == ".vcproj") {
             // return projTargetParse(targetPath);
