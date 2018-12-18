@@ -167,8 +167,15 @@ void generateCMakeProject(const ProjectData &projectData, GlobalSettings const &
         printf("cmkizer: Failed to open file to send CMake output to - %s", outFilePath.c_str());
         return;
     }
+
     fprintf(pOut, "cmake_minimum_required( VERSION %s )\n", globalSettings.cmakeVersion.data());
-    fprintf(pOut, "project ( %s )\n\n", projectData.name.data());
+    if (projectData.name.find(' ') == std::string::npos) {
+        // Project name has no spaces
+        fprintf(pOut, "project ( %s )\n\n", projectData.name.data());
+    } else {
+        // Project name has spaces
+        fprintf(pOut, "project ( \"%s\" )\n\n", projectData.name.data());
+    }
 
     for (auto &target : projectData.targets) {
         if (target.relativePath.find('/') == std::string::npos) {
@@ -219,7 +226,13 @@ void generateCMakeTarget(const TargetData &data,
     }
 
     // Project Name
-    fprintf(pOut, "project( %s )\n", data.name.data());
+    if (data.name.find(' ') == std::string::npos) {
+        // Project name has no spaces
+        fprintf(pOut, "project ( %s )\n", data.name.data());
+    } else {
+        // Project name has spaces
+        fprintf(pOut, "project ( \"%s\" )\n", data.name.data());
+    }
 
     // Languages
     fprintf(pOut, "enable_language( ");
